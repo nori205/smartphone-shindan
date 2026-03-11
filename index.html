@@ -154,17 +154,17 @@
     ══════════════════════════════════ */
     .title-top { text-align: center; margin-bottom: 22px; }
 
-    .dog-big {
-      font-size: 90px;
-      line-height: 1;
+    .char-svg {
       display: block;
-      margin-bottom: 10px;
-      animation: dogBounce 2.5s ease-in-out infinite;
+      margin: 0 auto 6px;
+      animation: charFloat 3.2s ease-in-out infinite;
+      filter: drop-shadow(0 6px 14px rgba(212,112,10,0.13));
     }
-    @keyframes dogBounce {
-      0%, 100% { transform: translateY(0) rotate(-2deg); }
-      50%       { transform: translateY(-10px) rotate(2deg); }
+    @keyframes charFloat {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
     }
+    .nori-svg { flex-shrink: 0; }
 
     .title-main {
       font-size: 28px;
@@ -354,13 +354,7 @@
       text-align: center;
       margin-bottom: 20px;
     }
-    .dog-result {
-      font-size: 80px;
-      line-height: 1;
-      display: block;
-      margin-bottom: 10px;
-      animation: dogBounce 2.5s ease-in-out infinite;
-    }
+    .char-result { margin-bottom: 10px; }
     .result-title {
       font-size: 21px;
       font-weight: 900;
@@ -441,13 +435,73 @@
   <div class="bg-circle" style="width:50px;height:50px;top:72%;left:60%;opacity:0.28;"></div>
 </div>
 
+<!-- ===== キャラクター SVG 定義 ===== -->
+<svg style="display:none" aria-hidden="true">
+  <symbol id="nori-char" viewBox="0 0 160 195">
+    <!-- 髪（ボブ・バック） -->
+    <path d="M14 110 Q13 178 80 181 Q147 178 146 110 Q144 47 112 35 Q96 28 80 28 Q64 28 48 35 Q16 47 14 110Z" fill="#C4915E"/>
+    <!-- 顔 -->
+    <ellipse cx="80" cy="108" rx="50" ry="57" fill="#FCDDB8"/>
+    <!-- 耳 -->
+    <ellipse cx="30" cy="108" rx="9" ry="12" fill="#FCDDB8"/>
+    <ellipse cx="30" cy="108" rx="5.5" ry="7.5" fill="#F0B090"/>
+    <ellipse cx="130" cy="108" rx="9" ry="12" fill="#FCDDB8"/>
+    <ellipse cx="130" cy="108" rx="5.5" ry="7.5" fill="#F0B090"/>
+    <!-- 髪前髪 -->
+    <path d="M30 100 Q32 36 80 31 Q128 36 130 100 Q119 57 97 51 Q88 48 80 48 Q72 48 63 51 Q41 57 30 100Z" fill="#C4915E"/>
+    <path d="M30 100 Q27 69 37 83 Q41 92 38 108" fill="#B8845A"/>
+    <path d="M130 100 Q133 69 123 83 Q119 92 122 108" fill="#B8845A"/>
+    <!-- 光沢 -->
+    <path d="M57 34 Q67 30 77 34" stroke="rgba(255,255,255,0.45)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M47 42 Q56 38 63 41" stroke="rgba(255,255,255,0.3)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <!-- 眉毛 -->
+    <path d="M50 81 Q60 76 71 79" stroke="#7A5030" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+    <path d="M89 79 Q100 76 110 81" stroke="#7A5030" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+    <!-- 左目 -->
+    <ellipse cx="63" cy="97" rx="13" ry="15" fill="white"/>
+    <ellipse cx="63" cy="99" rx="9.5" ry="11" fill="#4A2E18"/>
+    <ellipse cx="63" cy="99" rx="6.5" ry="7.5" fill="#6B4530"/>
+    <ellipse cx="64" cy="100" rx="3.8" ry="4.5" fill="#150800"/>
+    <ellipse cx="67.5" cy="93" rx="3.2" ry="2.5" fill="white"/>
+    <circle cx="59.5" cy="95.5" r="1.4" fill="white" opacity="0.7"/>
+    <path d="M50 87 Q57 83 76 86" stroke="#1A0A00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- 右目 -->
+    <ellipse cx="97" cy="97" rx="13" ry="15" fill="white"/>
+    <ellipse cx="97" cy="99" rx="9.5" ry="11" fill="#4A2E18"/>
+    <ellipse cx="97" cy="99" rx="6.5" ry="7.5" fill="#6B4530"/>
+    <ellipse cx="98" cy="100" rx="3.8" ry="4.5" fill="#150800"/>
+    <ellipse cx="101.5" cy="93" rx="3.2" ry="2.5" fill="white"/>
+    <circle cx="93.5" cy="95.5" r="1.4" fill="white" opacity="0.7"/>
+    <path d="M84 86 Q103 83 110 87" stroke="#1A0A00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- メガネ -->
+    <rect x="46" y="84" width="33" height="25" rx="8" fill="rgba(210,235,255,0.12)" stroke="#9A7A50" stroke-width="2.2"/>
+    <rect x="81" y="84" width="33" height="25" rx="8" fill="rgba(210,235,255,0.12)" stroke="#9A7A50" stroke-width="2.2"/>
+    <path d="M79 96 Q80 94 81 96" stroke="#9A7A50" stroke-width="2" fill="none"/>
+    <path d="M46 97 Q36 98 30 104" stroke="#9A7A50" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M114 97 Q124 98 130 104" stroke="#9A7A50" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <!-- 鼻 -->
+    <path d="M76 121 Q80 126 84 121" stroke="#D89878" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- 口 -->
+    <path d="M68 136 Q80 148 92 136" stroke="#C07060" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M70 137 Q80 145 90 137 Q80 143 70 137Z" fill="white" opacity="0.45"/>
+    <!-- 頬 -->
+    <ellipse cx="46" cy="124" rx="14" ry="8" fill="#FFB0A0" opacity="0.38"/>
+    <ellipse cx="114" cy="124" rx="14" ry="8" fill="#FFB0A0" opacity="0.38"/>
+    <!-- 首 -->
+    <rect x="67" y="162" width="26" height="20" rx="6" fill="#FCDDB8"/>
+    <!-- ボディ -->
+    <path d="M24 195 Q30 163 67 159 Q80 156 93 159 Q130 163 136 195Z" fill="#F5A623"/>
+    <path d="M67 159 Q75 172 80 174 Q85 172 93 159" fill="white" opacity="0.8"/>
+  </symbol>
+</svg>
+
 <div class="container">
 
   <!-- ==================== TITLE ==================== -->
   <div id="screen-title" class="screen active">
     <div class="card">
       <div class="title-top">
-        <span class="dog-big">🐕</span>
+        <svg class="char-svg" width="148" height="180" aria-label="のりさん"><use href="#nori-char"/></svg>
         <div class="badge">✨ 無料・約1分でわかる</div>
         <h1 class="title-main">スマホのりかえ<br>かんたん診断</h1>
         <p class="title-sub">5つの質問に答えるだけで<br>あなたにぴったりの節約ポイントがわかる！</p>
@@ -478,7 +532,7 @@
     <div class="card">
       <!-- Nori -->
       <div class="nori-row">
-        <div class="nori-avatar">🐕</div>
+        <svg class="nori-svg" width="44" height="53" aria-label="のりさん"><use href="#nori-char"/></svg>
         <div class="speech-bubble" id="nori-msg">一緒に考えよう！</div>
       </div>
 
@@ -514,7 +568,7 @@
   <div id="screen-result" class="screen">
     <div class="card">
       <div class="result-hero">
-        <span class="dog-result">🐕‍🦺</span>
+        <svg class="char-svg char-result" width="118" height="144" aria-label="のりさん"><use href="#nori-char"/></svg>
         <div class="badge">✅ 診断完了！</div>
         <h2 class="result-title" id="res-title">診断タイトル</h2>
       </div>
