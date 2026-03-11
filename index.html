@@ -203,6 +203,34 @@
     /* ══════════════════════════════════
        RESULT SCREEN
     ══════════════════════════════════ */
+    /* 診断コードボックス */
+    .code-box {
+      background: linear-gradient(135deg, #2C2C2C, #3A3A3A);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .code-label {
+      font-size: 11px;
+      color: #aaa;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .code-value {
+      font-size: 22px;
+      font-weight: 900;
+      color: #F7B731;
+      letter-spacing: 0.06em;
+      line-height: 1.3;
+    }
+    .code-hint {
+      font-size: 11px;
+      color: #888;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
     .result-hero { text-align: center; margin-bottom: 20px; }
     .dog-result {
       font-size: 80px; line-height: 1; display: block; margin-bottom: 10px;
@@ -347,6 +375,13 @@
   <!-- ==================== RESULT ==================== -->
   <div id="screen-result" class="screen">
     <div class="card">
+      <!-- 診断コード -->
+      <div class="code-box">
+        <div class="code-label">📋 あなたの診断コード</div>
+        <div class="code-value" id="res-code">―</div>
+        <div class="code-hint">※このコードをメッセージに添えると、より早くお返事できます！</div>
+      </div>
+
       <div class="result-hero">
         <span class="dog-result">📱</span>
         <div class="badge">✅ 診断完了！</div>
@@ -533,6 +568,31 @@ function nextQ() {
   }
 }
 
+function buildCode(ans) {
+  // 子供
+  const childMap = { '0': '子ナシ', '1': '子1人', '2': '子2人', '3+': '子3人↑' };
+  const child = childMap[ans.q3] || '子ナシ';
+
+  // 家族
+  let family;
+  if (ans.q1 === '1') {
+    family = '一人';
+  } else {
+    const famMap = { 'all-ok': '全協力', 'mostly': '半協力', 'reluctant': '非協力', 'solo': '自分のみ' };
+    family = famMap[ans.q2] || '全協力';
+  }
+
+  // 料金
+  const billMap = { 'low': '¥低', 'mid-low': '¥中低', 'mid-high': '¥中高', 'high': '¥高' };
+  const bill = billMap[ans.q4] || '¥中低';
+
+  // 光回線
+  const fiberMap = { 'can': '光○', 'rent': '光/賃貸', 'no-want': '光NG', 'no-fiber': '光ナシ' };
+  const fiber = fiberMap[ans.q5] || '光○';
+
+  return `${child}　／　${family}　／　${bill}　／　${fiber}`;
+}
+
 function showResult() {
   const { q2, q3, q4, q5 } = answers;
 
@@ -550,6 +610,7 @@ function showResult() {
     title = '今の料金、本当にベスト？一度確認しよう';
     savings = '月々 〜2,000円';
   }
+  document.getElementById('res-code').textContent = buildCode(answers);
   document.getElementById('res-title').textContent = title;
   document.getElementById('res-savings').textContent = savings;
 
