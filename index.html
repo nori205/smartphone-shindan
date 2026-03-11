@@ -8,14 +8,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+      box-sizing: border-box; margin: 0; padding: 0;
       -webkit-tap-highlight-color: transparent;
     }
-
     html { scroll-behavior: smooth; }
-
     body {
       font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
       background-color: #FFF9F0;
@@ -27,36 +23,19 @@
       overflow-x: hidden;
     }
 
-    /* ── Background decorations ── */
-    .bg-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
+    /* ── Background ── */
+    .bg-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
     .bg-dots {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background-image: radial-gradient(circle, #F0C070 1.5px, transparent 1.5px);
-      background-size: 28px 28px;
-      opacity: 0.18;
+      background-size: 28px 28px; opacity: 0.18;
     }
-    .bg-circle {
-      position: absolute;
-      border-radius: 50%;
-      background: #FAD9A1;
-    }
+    .bg-circle { position: absolute; border-radius: 50%; background: #FAD9A1; }
 
     /* ── Container ── */
-    .container {
-      width: 100%;
-      max-width: 480px;
-      position: relative;
-      z-index: 1;
-    }
+    .container { width: 100%; max-width: 480px; position: relative; z-index: 1; }
 
-    /* ── Screen transitions ── */
+    /* ── Screens ── */
     .screen { display: none; }
     .screen.active {
       display: block;
@@ -72,242 +51,119 @@
       background: #fff;
       border-radius: 24px;
       padding: 28px 20px 32px;
-      box-shadow: 0 8px 40px rgba(212, 112, 10, 0.10);
+      box-shadow: 0 8px 40px rgba(212,112,10,0.10);
       margin-top: 20px;
     }
 
-    /* ── Badges ── */
+    /* ── Badge ── */
     .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+      display: inline-flex; align-items: center; gap: 4px;
       background: linear-gradient(135deg, #F5A623, #F7B731);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 5px 14px;
-      border-radius: 99px;
-      letter-spacing: 0.03em;
+      color: #fff; font-size: 12px; font-weight: 700;
+      padding: 5px 14px; border-radius: 99px; letter-spacing: 0.03em;
     }
 
     /* ── Buttons ── */
     .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      border: none;
-      border-radius: 16px;
-      font-family: inherit;
-      font-weight: 700;
-      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; border: none; border-radius: 16px;
+      font-family: inherit; font-weight: 700; cursor: pointer;
       transition: transform 0.12s, box-shadow 0.12s, opacity 0.2s;
-      min-height: 54px;
-      font-size: 17px;
-      text-align: center;
-      text-decoration: none;
-      line-height: 1.35;
-      gap: 6px;
+      min-height: 54px; font-size: 17px;
+      text-align: center; text-decoration: none; line-height: 1.35; gap: 6px;
     }
     .btn:active { transform: scale(0.97); }
-
     .btn-orange {
       background: linear-gradient(135deg, #F5A623 0%, #F7B731 100%);
-      color: #fff;
-      box-shadow: 0 5px 18px rgba(245, 166, 35, 0.45);
-      padding: 16px 20px;
+      color: #fff; box-shadow: 0 5px 18px rgba(245,166,35,0.45); padding: 16px 20px;
     }
-    .btn-orange:active { box-shadow: 0 2px 8px rgba(245, 166, 35, 0.3); }
-
+    .btn-orange:active { box-shadow: 0 2px 8px rgba(245,166,35,0.3); }
     .btn-green {
       background: linear-gradient(135deg, #3CB371 0%, #27A05A 100%);
-      color: #fff;
-      box-shadow: 0 5px 20px rgba(60, 179, 113, 0.45);
-      padding: 18px 20px;
-      font-size: 18px;
-      min-height: 62px;
-      border-radius: 18px;
+      color: #fff; box-shadow: 0 5px 20px rgba(60,179,113,0.45);
+      padding: 18px 20px; font-size: 18px; min-height: 62px; border-radius: 18px;
     }
-    .btn-green:active { box-shadow: 0 2px 8px rgba(60, 179, 113, 0.3); }
-
+    .btn-green:active { box-shadow: 0 2px 8px rgba(60,179,113,0.3); }
     .btn-ghost {
-      background: transparent;
-      color: #bbb;
-      border: 1.5px solid #e8e8e8;
-      padding: 13px 20px;
-      font-size: 14px;
-      min-height: 48px;
+      background: transparent; color: #bbb; border: 1.5px solid #e8e8e8;
+      padding: 13px 20px; font-size: 14px; min-height: 48px;
     }
     .btn-ghost:active { background: #f5f5f5; }
+    .btn-next { opacity: 0.4; pointer-events: none; }
+    .btn-next.enabled { opacity: 1; pointer-events: auto; }
 
-    .btn-next {
-      opacity: 0.4;
-      pointer-events: none;
+    /* ── Chibi character ── */
+    .char-wrap {
+      display: flex; justify-content: center;
+      margin-bottom: 6px;
     }
-    .btn-next.enabled {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* ══════════════════════════════════
-       TITLE SCREEN
-    ══════════════════════════════════ */
-    .title-top { text-align: center; margin-bottom: 22px; }
-
-    .char-svg {
-      display: block;
-      margin: 0 auto 6px;
+    .char-wrap svg {
       animation: charFloat 3.2s ease-in-out infinite;
-      filter: drop-shadow(0 6px 14px rgba(212,112,10,0.13));
+      filter: drop-shadow(0 8px 16px rgba(212,112,10,0.14));
     }
     @keyframes charFloat {
       0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-10px); }
+      50%       { transform: translateY(-12px); }
     }
-    .nori-svg { flex-shrink: 0; }
 
+    /* ── TITLE ── */
+    .title-top { text-align: center; margin-bottom: 22px; }
     .title-main {
-      font-size: 28px;
-      font-weight: 900;
-      color: #D4700A;
-      line-height: 1.3;
-      margin: 12px 0 8px;
+      font-size: 28px; font-weight: 900; color: #D4700A;
+      line-height: 1.3; margin: 10px 0 8px;
     }
-    .title-sub {
-      font-size: 14px;
-      color: #999;
-      line-height: 1.7;
-    }
-
+    .title-sub { font-size: 14px; color: #999; line-height: 1.7; }
     .features {
-      background: #FFF9F0;
-      border-radius: 16px;
-      padding: 6px 16px;
-      margin: 20px 0 22px;
+      background: #FFF9F0; border-radius: 16px;
+      padding: 6px 16px; margin: 20px 0 22px;
     }
     .feat-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 0;
-      font-size: 14px;
-      color: #555;
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 0; font-size: 14px; color: #555;
     }
     .feat-row:not(:last-child) { border-bottom: 1px solid #FAD9A1; }
     .feat-icon {
-      width: 32px;
-      height: 32px;
+      width: 32px; height: 32px;
       background: linear-gradient(135deg, #F5A623, #F7B731);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-      flex-shrink: 0;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 15px; flex-shrink: 0;
     }
+    .nori-caption { text-align: center; margin-top: 14px; font-size: 13px; color: #ccc; }
 
-    .nori-caption {
-      text-align: center;
-      margin-top: 14px;
-      font-size: 13px;
-      color: #ccc;
-    }
-
-    /* ══════════════════════════════════
-       QUESTION SCREEN
-    ══════════════════════════════════ */
-
-    /* Nori speech bubble */
-    .nori-row {
-      display: flex;
-      align-items: flex-end;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .nori-avatar {
-      font-size: 38px;
-      flex-shrink: 0;
-      line-height: 1;
-    }
+    /* ── QUESTION ── */
+    .nori-row { display: flex; align-items: flex-end; gap: 10px; margin-bottom: 20px; }
+    .nori-avatar-wrap { flex-shrink: 0; }
     .speech-bubble {
       background: linear-gradient(135deg, #F5A623, #F7B731);
-      color: #fff;
-      font-size: 13.5px;
-      font-weight: 700;
-      padding: 10px 14px;
-      border-radius: 14px 14px 14px 4px;
-      line-height: 1.55;
-      flex: 1;
+      color: #fff; font-size: 13.5px; font-weight: 700;
+      padding: 10px 14px; border-radius: 14px 14px 14px 4px;
+      line-height: 1.55; flex: 1;
     }
-
-    /* Progress */
     .progress-section { margin-bottom: 22px; }
     .progress-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 7px;
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 7px;
     }
-    .progress-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: #E8831A;
-    }
+    .progress-label { font-size: 13px; font-weight: 700; color: #E8831A; }
     .progress-pct { font-size: 13px; color: #ccc; }
-    .progress-track {
-      height: 9px;
-      background: #FAD9A1;
-      border-radius: 99px;
-      overflow: hidden;
-    }
+    .progress-track { height: 9px; background: #FAD9A1; border-radius: 99px; overflow: hidden; }
     .progress-bar {
       height: 100%;
       background: linear-gradient(90deg, #F5A623, #F7B731);
       border-radius: 99px;
       transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
-
-    /* Question text */
-    .q-emoji {
-      text-align: center;
-      font-size: 54px;
-      margin-bottom: 10px;
-    }
-    .q-num {
-      font-size: 12px;
-      font-weight: 900;
-      color: #F5A623;
-      letter-spacing: 0.08em;
-      margin-bottom: 5px;
-    }
-    .q-text {
-      font-size: 20px;
-      font-weight: 900;
-      color: #333;
-      line-height: 1.45;
-      margin-bottom: 22px;
-    }
-
-    /* Options */
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .q-emoji { text-align: center; font-size: 56px; margin-bottom: 10px; line-height: 1.2; }
+    .q-emoji svg { display: inline-block; }
+    .q-num { font-size: 12px; font-weight: 900; color: #F5A623; letter-spacing: 0.08em; margin-bottom: 5px; }
+    .q-text { font-size: 20px; font-weight: 900; color: #333; line-height: 1.45; margin-bottom: 22px; }
+    .options { display: flex; flex-direction: column; gap: 10px; }
     .opt-btn {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      width: 100%;
-      background: #FFF9F0;
-      border: 2px solid #FAD9A1;
-      border-radius: 14px;
-      padding: 13px 16px;
-      cursor: pointer;
+      display: flex; align-items: center; gap: 13px; width: 100%;
+      background: #FFF9F0; border: 2px solid #FAD9A1; border-radius: 14px;
+      padding: 13px 16px; cursor: pointer;
       transition: border-color 0.15s, background 0.15s, transform 0.1s;
-      min-height: 54px;
-      text-align: left;
-      font-family: inherit;
+      min-height: 54px; text-align: left; font-family: inherit;
     }
     .opt-btn:active { transform: scale(0.98); }
     .opt-btn.selected {
@@ -315,111 +171,38 @@
       background: linear-gradient(135deg, rgba(245,166,35,0.07), rgba(247,183,49,0.07));
     }
     .opt-ring {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      border: 2px solid #FAD9A1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      width: 26px; height: 26px; border-radius: 50%; border: 2px solid #FAD9A1;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
       transition: background 0.15s, border-color 0.15s;
-      font-size: 13px;
-      color: transparent;
-      font-weight: 900;
+      font-size: 13px; color: transparent; font-weight: 900;
     }
-    .opt-btn.selected .opt-ring {
-      background: #F5A623;
-      border-color: #F5A623;
-      color: #fff;
-    }
-    .opt-label {
-      font-size: 15px;
-      color: #555;
-      font-weight: 500;
-      line-height: 1.45;
-      flex: 1;
-    }
-    .opt-btn.selected .opt-label {
-      color: #E8831A;
-      font-weight: 700;
-    }
-
+    .opt-btn.selected .opt-ring { background: #F5A623; border-color: #F5A623; color: #fff; }
+    .opt-label { font-size: 15px; color: #555; font-weight: 500; line-height: 1.45; flex: 1; }
+    .opt-btn.selected .opt-label { color: #E8831A; font-weight: 700; }
     .btn-next-wrap { margin-top: 22px; }
 
-    /* ══════════════════════════════════
-       RESULT SCREEN
-    ══════════════════════════════════ */
-    .result-hero {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .char-result { margin-bottom: 10px; }
-    .result-title {
-      font-size: 21px;
-      font-weight: 900;
-      color: #D4700A;
-      line-height: 1.4;
-      margin-top: 10px;
-    }
-
-    /* Savings box */
+    /* ── RESULT ── */
+    .result-hero { text-align: center; margin-bottom: 20px; }
+    .result-title { font-size: 21px; font-weight: 900; color: #D4700A; line-height: 1.4; margin-top: 10px; }
     .savings-box {
       background: linear-gradient(135deg, #E8831A, #D4700A);
-      border-radius: 18px;
-      padding: 18px 16px;
-      text-align: center;
-      margin-bottom: 18px;
-      color: #fff;
+      border-radius: 18px; padding: 18px 16px; text-align: center;
+      margin-bottom: 18px; color: #fff;
     }
-    .savings-label {
-      font-size: 12px;
-      opacity: 0.85;
-      margin-bottom: 3px;
-    }
-    .savings-amount {
-      font-size: 28px;
-      font-weight: 900;
-      line-height: 1.25;
-      margin-bottom: 4px;
-    }
+    .savings-label { font-size: 12px; opacity: 0.85; margin-bottom: 3px; }
+    .savings-amount { font-size: 28px; font-weight: 900; line-height: 1.25; margin-bottom: 4px; }
     .savings-note { font-size: 11px; opacity: 0.7; }
-
-    /* Message list */
-    .msg-list {
-      background: #FFF9F0;
-      border-radius: 16px;
-      padding: 2px 16px;
-      margin-bottom: 18px;
-    }
-    .msg-item {
-      font-size: 14.5px;
-      color: #555;
-      line-height: 1.75;
-      padding: 14px 0;
-    }
+    .msg-list { background: #FFF9F0; border-radius: 16px; padding: 2px 16px; margin-bottom: 18px; }
+    .msg-item { font-size: 14.5px; color: #555; line-height: 1.75; padding: 14px 0; }
     .msg-item:not(:last-child) { border-bottom: 1px dashed #FAD9A1; }
-
-    /* Common closing message */
     .common-msg {
       background: linear-gradient(135deg, rgba(245,166,35,0.08), rgba(247,183,49,0.08));
-      border: 1.5px solid #FAD9A1;
-      border-radius: 16px;
-      padding: 16px 18px;
-      font-size: 15px;
-      color: #555;
-      line-height: 1.75;
-      text-align: center;
-      margin-bottom: 22px;
+      border: 1.5px solid #FAD9A1; border-radius: 16px;
+      padding: 16px 18px; font-size: 15px; color: #555;
+      line-height: 1.75; text-align: center; margin-bottom: 22px;
     }
     .common-msg strong { color: #E8831A; }
-
-    .cta-sub {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 13px;
-      color: #bbb;
-    }
+    .cta-sub { text-align: center; margin-top: 10px; font-size: 13px; color: #bbb; }
     .retry-wrap { margin-top: 12px; }
   </style>
 </head>
@@ -432,67 +215,207 @@
   <div class="bg-circle" style="width:110px;height:110px;top:32%;left:-36px;opacity:0.35;"></div>
   <div class="bg-circle" style="width:70px;height:70px;top:58%;right:10px;opacity:0.28;"></div>
   <div class="bg-circle" style="width:170px;height:170px;bottom:-65px;left:12%;opacity:0.38;"></div>
-  <div class="bg-circle" style="width:50px;height:50px;top:72%;left:60%;opacity:0.28;"></div>
 </div>
 
-<!-- ===== キャラクター SVG 定義 ===== -->
+<!-- ===== SVG シンボル定義 ===== -->
 <svg style="display:none" aria-hidden="true">
-  <symbol id="nori-char" viewBox="0 0 160 195">
+
+  <!-- のりさん（眼鏡・ライトブラウンボブ）ちびキャラ -->
+  <symbol id="nori-char" viewBox="0 0 160 186">
     <!-- 髪（ボブ・バック） -->
-    <path d="M14 110 Q13 178 80 181 Q147 178 146 110 Q144 47 112 35 Q96 28 80 28 Q64 28 48 35 Q16 47 14 110Z" fill="#C4915E"/>
+    <path d="M16 82 Q12 158 80 162 Q148 158 144 82 Q142 16 112 4 Q96-2 80-2 Q64-2 48 4 Q18 16 16 82Z" fill="#C8966A"/>
     <!-- 顔 -->
-    <ellipse cx="80" cy="108" rx="50" ry="57" fill="#FCDDB8"/>
+    <circle cx="80" cy="78" r="63" fill="#FDDCBC"/>
     <!-- 耳 -->
-    <ellipse cx="30" cy="108" rx="9" ry="12" fill="#FCDDB8"/>
-    <ellipse cx="30" cy="108" rx="5.5" ry="7.5" fill="#F0B090"/>
-    <ellipse cx="130" cy="108" rx="9" ry="12" fill="#FCDDB8"/>
-    <ellipse cx="130" cy="108" rx="5.5" ry="7.5" fill="#F0B090"/>
-    <!-- 髪前髪 -->
-    <path d="M30 100 Q32 36 80 31 Q128 36 130 100 Q119 57 97 51 Q88 48 80 48 Q72 48 63 51 Q41 57 30 100Z" fill="#C4915E"/>
-    <path d="M30 100 Q27 69 37 83 Q41 92 38 108" fill="#B8845A"/>
-    <path d="M130 100 Q133 69 123 83 Q119 92 122 108" fill="#B8845A"/>
-    <!-- 光沢 -->
-    <path d="M57 34 Q67 30 77 34" stroke="rgba(255,255,255,0.45)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M47 42 Q56 38 63 41" stroke="rgba(255,255,255,0.3)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <circle cx="17" cy="82" r="11" fill="#FDDCBC"/>
+    <circle cx="17" cy="82" r="6.5" fill="#F0B090"/>
+    <circle cx="143" cy="82" r="11" fill="#FDDCBC"/>
+    <circle cx="143" cy="82" r="6.5" fill="#F0B090"/>
+    <!-- 前髪 -->
+    <path d="M17 76 Q20 12 80 8 Q140 12 143 76 Q130 36 106 28 Q93 23 80 23 Q67 23 54 28 Q30 36 17 76Z" fill="#C8966A"/>
+    <!-- 前髪 サイドピース -->
+    <path d="M17 76 Q12 50 20 63 Q24 72 20 88" fill="#B07840"/>
+    <path d="M143 76 Q148 50 140 63 Q136 72 140 88" fill="#B07840"/>
+    <!-- 髪の艶 -->
+    <path d="M54 11 Q68 6 82 10" stroke="rgba(255,255,255,0.52)" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M40 21 Q52 16 62 19" stroke="rgba(255,255,255,0.34)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
     <!-- 眉毛 -->
-    <path d="M50 81 Q60 76 71 79" stroke="#7A5030" stroke-width="2.3" fill="none" stroke-linecap="round"/>
-    <path d="M89 79 Q100 76 110 81" stroke="#7A5030" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+    <path d="M38 53 Q52 46 67 50" stroke="#7A5030" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    <path d="M93 50 Q108 46 122 53" stroke="#7A5030" stroke-width="3.2" fill="none" stroke-linecap="round"/>
     <!-- 左目 -->
-    <ellipse cx="63" cy="97" rx="13" ry="15" fill="white"/>
-    <ellipse cx="63" cy="99" rx="9.5" ry="11" fill="#4A2E18"/>
-    <ellipse cx="63" cy="99" rx="6.5" ry="7.5" fill="#6B4530"/>
-    <ellipse cx="64" cy="100" rx="3.8" ry="4.5" fill="#150800"/>
-    <ellipse cx="67.5" cy="93" rx="3.2" ry="2.5" fill="white"/>
-    <circle cx="59.5" cy="95.5" r="1.4" fill="white" opacity="0.7"/>
-    <path d="M50 87 Q57 83 76 86" stroke="#1A0A00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="56" cy="78" rx="20" ry="23" fill="white"/>
+    <ellipse cx="56" cy="80" rx="15" ry="18" fill="#4A2E18"/>
+    <ellipse cx="56" cy="80" rx="10" ry="13" fill="#7A5238"/>
+    <circle cx="57" cy="81" r="6.5" fill="#100500"/>
+    <ellipse cx="63" cy="71" rx="5.5" ry="4.5" fill="white"/>
+    <circle cx="50" cy="74" r="2.8" fill="white" opacity="0.72"/>
+    <path d="M36 63 Q46 57 76 61" stroke="#0A0300" stroke-width="4" fill="none" stroke-linecap="round"/>
     <!-- 右目 -->
-    <ellipse cx="97" cy="97" rx="13" ry="15" fill="white"/>
-    <ellipse cx="97" cy="99" rx="9.5" ry="11" fill="#4A2E18"/>
-    <ellipse cx="97" cy="99" rx="6.5" ry="7.5" fill="#6B4530"/>
-    <ellipse cx="98" cy="100" rx="3.8" ry="4.5" fill="#150800"/>
-    <ellipse cx="101.5" cy="93" rx="3.2" ry="2.5" fill="white"/>
-    <circle cx="93.5" cy="95.5" r="1.4" fill="white" opacity="0.7"/>
-    <path d="M84 86 Q103 83 110 87" stroke="#1A0A00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <!-- メガネ -->
-    <rect x="46" y="84" width="33" height="25" rx="8" fill="rgba(210,235,255,0.12)" stroke="#9A7A50" stroke-width="2.2"/>
-    <rect x="81" y="84" width="33" height="25" rx="8" fill="rgba(210,235,255,0.12)" stroke="#9A7A50" stroke-width="2.2"/>
-    <path d="M79 96 Q80 94 81 96" stroke="#9A7A50" stroke-width="2" fill="none"/>
-    <path d="M46 97 Q36 98 30 104" stroke="#9A7A50" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    <path d="M114 97 Q124 98 130 104" stroke="#9A7A50" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    <!-- 鼻 -->
-    <path d="M76 121 Q80 126 84 121" stroke="#D89878" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-    <!-- 口 -->
-    <path d="M68 136 Q80 148 92 136" stroke="#C07060" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-    <path d="M70 137 Q80 145 90 137 Q80 143 70 137Z" fill="white" opacity="0.45"/>
-    <!-- 頬 -->
-    <ellipse cx="46" cy="124" rx="14" ry="8" fill="#FFB0A0" opacity="0.38"/>
-    <ellipse cx="114" cy="124" rx="14" ry="8" fill="#FFB0A0" opacity="0.38"/>
+    <ellipse cx="104" cy="78" rx="20" ry="23" fill="white"/>
+    <ellipse cx="104" cy="80" rx="15" ry="18" fill="#4A2E18"/>
+    <ellipse cx="104" cy="80" rx="10" ry="13" fill="#7A5238"/>
+    <circle cx="105" cy="81" r="6.5" fill="#100500"/>
+    <ellipse cx="111" cy="71" rx="5.5" ry="4.5" fill="white"/>
+    <circle cx="98" cy="74" r="2.8" fill="white" opacity="0.72"/>
+    <path d="M84 61 Q114 57 124 63" stroke="#0A0300" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <!-- メガネ（ちびっこ風・シンプル） -->
+    <rect x="33" y="61" width="46" height="34" rx="12" fill="rgba(210,240,255,0.1)" stroke="#A08860" stroke-width="2.8"/>
+    <rect x="81" y="61" width="46" height="34" rx="12" fill="rgba(210,240,255,0.1)" stroke="#A08860" stroke-width="2.8"/>
+    <path d="M79 78 Q80 75 81 78" stroke="#A08860" stroke-width="2.8" fill="none"/>
+    <path d="M33 78 Q20 79 15 84" stroke="#A08860" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <path d="M127 78 Q140 79 145 84" stroke="#A08860" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <!-- 鼻（ちびっこ点） -->
+    <circle cx="80" cy="103" r="2.8" fill="#E0A07A"/>
+    <!-- 口（かわいい笑顔） -->
+    <path d="M60 116 Q80 134 100 116" stroke="#C87868" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M62 117 Q80 132 98 117 Q80 127 62 117Z" fill="white" opacity="0.4"/>
+    <!-- ほっぺた -->
+    <ellipse cx="27" cy="104" rx="20" ry="13" fill="#FFB0A0" opacity="0.46"/>
+    <ellipse cx="133" cy="104" rx="20" ry="13" fill="#FFB0A0" opacity="0.46"/>
     <!-- 首 -->
-    <rect x="67" y="162" width="26" height="20" rx="6" fill="#FCDDB8"/>
-    <!-- ボディ -->
-    <path d="M24 195 Q30 163 67 159 Q80 156 93 159 Q130 163 136 195Z" fill="#F5A623"/>
-    <path d="M67 159 Q75 172 80 174 Q85 172 93 159" fill="white" opacity="0.8"/>
+    <rect x="64" y="137" width="32" height="14" rx="7" fill="#FDDCBC"/>
+    <!-- ボディ（ちびっこ・小さめ） -->
+    <rect x="34" y="149" width="92" height="36" rx="24" fill="#F5A623"/>
+    <!-- 襟 -->
+    <path d="M64 151 Q80 166 96 151" fill="white" opacity="0.8"/>
+    <!-- 腕（まるっこい） -->
+    <ellipse cx="24" cy="165" rx="16" ry="12" fill="#F5A623" transform="rotate(-18 24 165)"/>
+    <ellipse cx="136" cy="165" rx="16" ry="12" fill="#F5A623" transform="rotate(18 136 165)"/>
+    <!-- 手（まるっこい） -->
+    <circle cx="16" cy="176" r="12" fill="#FDDCBC"/>
+    <circle cx="144" cy="176" r="12" fill="#FDDCBC"/>
   </symbol>
+
+  <!-- 家族アイコン（3人ちびキャラ） -->
+  <symbol id="icon-family" viewBox="0 0 180 130">
+    <!-- ── パパ（左） ── -->
+    <!-- 髪 -->
+    <circle cx="35" cy="46" r="30" fill="#6A5040"/>
+    <!-- 顔 -->
+    <circle cx="35" cy="48" r="26" fill="#FDDCBC"/>
+    <!-- 髪前 -->
+    <path d="M9 42 Q12 18 35 16 Q58 18 61 42 Q54 24 35 22 Q16 24 9 42Z" fill="#6A5040"/>
+    <!-- 目 -->
+    <ellipse cx="27" cy="46" rx="8" ry="9" fill="white"/>
+    <circle cx="27" cy="47" r="5.5" fill="#222"/>
+    <circle cx="29.5" cy="44" r="2.2" fill="white"/>
+    <ellipse cx="43" cy="46" rx="8" ry="9" fill="white"/>
+    <circle cx="43" cy="47" r="5.5" fill="#222"/>
+    <circle cx="45.5" cy="44" r="2.2" fill="white"/>
+    <path d="M18 36 Q27 31 44 34" stroke="#0A0300" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+    <!-- 口 -->
+    <path d="M26 60 Q35 68 44 60" stroke="#C07060" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- ほっぺた -->
+    <ellipse cx="16" cy="55" rx="9" ry="6" fill="#FFB0A0" opacity="0.44"/>
+    <ellipse cx="54" cy="55" rx="9" ry="6" fill="#FFB0A0" opacity="0.44"/>
+    <!-- ボディ -->
+    <rect x="18" y="72" width="34" height="28" rx="13" fill="#5B8DD9"/>
+    <!-- 腕 -->
+    <ellipse cx="11" cy="83" rx="9" ry="7" fill="#5B8DD9" transform="rotate(-15 11 83)"/>
+    <ellipse cx="59" cy="83" rx="9" ry="7" fill="#5B8DD9" transform="rotate(15 59 83)"/>
+
+    <!-- ── ママ（真ん中・少し大きめ） ── -->
+    <!-- 髪（ボブ） -->
+    <ellipse cx="90" cy="54" rx="36" ry="44" fill="#C8966A"/>
+    <!-- 顔 -->
+    <circle cx="90" cy="48" r="30" fill="#FDDCBC"/>
+    <!-- 前髪 -->
+    <path d="M60 44 Q63 14 90 12 Q117 14 120 44 Q112 22 90 20 Q68 22 60 44Z" fill="#C8966A"/>
+    <!-- 目 -->
+    <ellipse cx="80" cy="46" rx="10" ry="11" fill="white"/>
+    <circle cx="80" cy="47" r="7" fill="#4A2E18"/>
+    <circle cx="83.5" cy="43.5" r="3" fill="white"/>
+    <ellipse cx="100" cy="46" rx="10" ry="11" fill="white"/>
+    <circle cx="100" cy="47" r="7" fill="#4A2E18"/>
+    <circle cx="103.5" cy="43.5" r="3" fill="white"/>
+    <path d="M70 34 Q80 29 92 32" stroke="#0A0300" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M88 32 Q100 29 110 34" stroke="#0A0300" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- 口 -->
+    <path d="M78 62 Q90 72 102 62" stroke="#C07060" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <!-- ほっぺた -->
+    <ellipse cx="64" cy="56" rx="12" ry="7" fill="#FFB0A0" opacity="0.44"/>
+    <ellipse cx="116" cy="56" rx="12" ry="7" fill="#FFB0A0" opacity="0.44"/>
+    <!-- ボディ -->
+    <rect x="70" y="76" width="40" height="32" rx="16" fill="#F5A623"/>
+    <path d="M76 78 Q90 90 104 78" fill="white" opacity="0.72"/>
+    <!-- 腕 -->
+    <ellipse cx="62" cy="88" rx="11" ry="8" fill="#F5A623" transform="rotate(-15 62 88)"/>
+    <ellipse cx="118" cy="88" rx="11" ry="8" fill="#F5A623" transform="rotate(15 118 88)"/>
+
+    <!-- ── こども（右・小さめ） ── -->
+    <!-- 髪 -->
+    <circle cx="150" cy="56" r="24" fill="#D4A86A"/>
+    <!-- 顔 -->
+    <circle cx="150" cy="58" r="20" fill="#FDDCBC"/>
+    <!-- 前髪 -->
+    <path d="M126 52 Q128 34 150 32 Q172 34 174 52 Q167 38 150 36 Q133 38 126 52Z" fill="#D4A86A"/>
+    <!-- アホ毛 -->
+    <path d="M148 32 Q150 24 152 32" stroke="#C4905E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- 目（ちびっこ） -->
+    <ellipse cx="143" cy="56" rx="7" ry="8" fill="white"/>
+    <circle cx="143" cy="57" r="4.5" fill="#3A2010"/>
+    <circle cx="145.5" cy="54.5" r="2" fill="white"/>
+    <ellipse cx="157" cy="56" rx="7" ry="8" fill="white"/>
+    <circle cx="157" cy="57" r="4.5" fill="#3A2010"/>
+    <circle cx="159.5" cy="54.5" r="2" fill="white"/>
+    <path d="M135 47 Q143 43 153 46" stroke="#0A0300" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- 口 -->
+    <path d="M143 68 Q150 75 157 68" stroke="#C07060" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <!-- ほっぺた -->
+    <ellipse cx="133" cy="63" rx="8" ry="5" fill="#FFB0A0" opacity="0.46"/>
+    <ellipse cx="167" cy="63" rx="8" ry="5" fill="#FFB0A0" opacity="0.46"/>
+    <!-- ボディ -->
+    <rect x="137" y="77" width="26" height="24" rx="10" fill="#FF8A6A"/>
+    <!-- 腕 -->
+    <ellipse cx="130" cy="86" rx="8" ry="6" fill="#FF8A6A" transform="rotate(-15 130 86)"/>
+    <ellipse cx="164" cy="86" rx="8" ry="6" fill="#FF8A6A" transform="rotate(15 164 86)"/>
+  </symbol>
+
+  <!-- こどもアイコン（ぷっくりちびっこ） -->
+  <symbol id="icon-baby" viewBox="0 0 120 130">
+    <!-- 髪 -->
+    <circle cx="60" cy="52" r="46" fill="#D4A86A"/>
+    <!-- 顔（めちゃ丸） -->
+    <circle cx="60" cy="56" r="42" fill="#FDDCBC"/>
+    <!-- 前髪 -->
+    <path d="M18 48 Q22 8 60 6 Q98 8 102 48 Q92 24 60 21 Q28 24 18 48Z" fill="#D4A86A"/>
+    <!-- アホ毛（かわいい） -->
+    <path d="M57 6 Q60-4 63 6" stroke="#C4905E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <circle cx="60" cy="-4" r="4" fill="#D4A86A"/>
+    <!-- 目（めちゃでか・ちびキャラ） -->
+    <ellipse cx="43" cy="55" rx="14" ry="16" fill="white"/>
+    <ellipse cx="43" cy="57" rx="10" ry="12" fill="#3A2010"/>
+    <ellipse cx="43" cy="57" rx="7" ry="8" fill="#5A3820"/>
+    <circle cx="43" cy="57" r="4" fill="#100500"/>
+    <ellipse cx="48" cy="50" rx="4.5" ry="3.5" fill="white"/>
+    <circle cx="39" cy="53" r="2" fill="white" opacity="0.7"/>
+    <ellipse cx="77" cy="55" rx="14" ry="16" fill="white"/>
+    <ellipse cx="77" cy="57" rx="10" ry="12" fill="#3A2010"/>
+    <ellipse cx="77" cy="57" rx="7" ry="8" fill="#5A3820"/>
+    <circle cx="77" cy="57" r="4" fill="#100500"/>
+    <ellipse cx="82" cy="50" rx="4.5" ry="3.5" fill="white"/>
+    <circle cx="73" cy="53" r="2" fill="white" opacity="0.7"/>
+    <!-- まつ毛 -->
+    <path d="M29 43 Q36 38 57 41" stroke="#0A0300" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M63 41 Q84 38 91 43" stroke="#0A0300" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <!-- 鼻（ちびっこ） -->
+    <circle cx="60" cy="76" r="3" fill="#E0A07A"/>
+    <!-- 笑顔 -->
+    <path d="M46 88 Q60 102 74 88" stroke="#C87868" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M48 89 Q60 101 72 89 Q60 97 48 89Z" fill="white" opacity="0.4"/>
+    <!-- ほっぺた（おっきめ） -->
+    <ellipse cx="23" cy="74" rx="18" ry="11" fill="#FFB0A0" opacity="0.52"/>
+    <ellipse cx="97" cy="74" rx="18" ry="11" fill="#FFB0A0" opacity="0.52"/>
+    <!-- ボディ（ロンパース） -->
+    <ellipse cx="60" cy="116" rx="38" ry="20" fill="#A8C8F8"/>
+    <path d="M38 106 Q60 120 82 106" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/>
+    <!-- 腕（ちんまり） -->
+    <ellipse cx="20" cy="108" rx="13" ry="10" fill="#A8C8F8" transform="rotate(-20 20 108)"/>
+    <ellipse cx="100" cy="108" rx="13" ry="10" fill="#A8C8F8" transform="rotate(20 100 108)"/>
+    <circle cx="13" cy="118" r="10" fill="#FDDCBC"/>
+    <circle cx="107" cy="118" r="10" fill="#FDDCBC"/>
+  </symbol>
+
 </svg>
 
 <div class="container">
@@ -501,7 +424,9 @@
   <div id="screen-title" class="screen active">
     <div class="card">
       <div class="title-top">
-        <svg class="char-svg" width="148" height="180" aria-label="のりさん"><use href="#nori-char"/></svg>
+        <div class="char-wrap">
+          <svg width="154" height="180" aria-label="のりさん"><use href="#nori-char"/></svg>
+        </div>
         <div class="badge">✨ 無料・約1分でわかる</div>
         <h1 class="title-main">スマホのりかえ<br>かんたん診断</h1>
         <p class="title-sub">5つの質問に答えるだけで<br>あなたにぴったりの節約ポイントがわかる！</p>
@@ -530,13 +455,13 @@
   <!-- ==================== QUESTION ==================== -->
   <div id="screen-question" class="screen">
     <div class="card">
-      <!-- Nori -->
       <div class="nori-row">
-        <svg class="nori-svg" width="44" height="53" aria-label="のりさん"><use href="#nori-char"/></svg>
+        <div class="nori-avatar-wrap">
+          <svg width="46" height="54" aria-label="のりさん"><use href="#nori-char"/></svg>
+        </div>
         <div class="speech-bubble" id="nori-msg">一緒に考えよう！</div>
       </div>
 
-      <!-- Progress -->
       <div class="progress-section">
         <div class="progress-meta">
           <span class="progress-label" id="prog-label">質問 1 / 5</span>
@@ -547,19 +472,12 @@
         </div>
       </div>
 
-      <!-- Question -->
       <div class="q-emoji" id="q-emoji">👨‍👩‍👧‍👦</div>
       <div class="q-num" id="q-num">Q1</div>
       <div class="q-text" id="q-text">質問テキスト</div>
-
-      <!-- Options -->
       <div class="options" id="options"></div>
-
-      <!-- Next -->
       <div class="btn-next-wrap">
-        <button class="btn btn-orange btn-next" id="btn-next" onclick="nextQ()">
-          次の質問へ →
-        </button>
+        <button class="btn btn-orange btn-next" id="btn-next" onclick="nextQ()">次の質問へ →</button>
       </div>
     </div>
   </div>
@@ -568,30 +486,28 @@
   <div id="screen-result" class="screen">
     <div class="card">
       <div class="result-hero">
-        <svg class="char-svg char-result" width="118" height="144" aria-label="のりさん"><use href="#nori-char"/></svg>
+        <div class="char-wrap">
+          <svg width="120" height="139" aria-label="のりさん"><use href="#nori-char"/></svg>
+        </div>
         <div class="badge">✅ 診断完了！</div>
         <h2 class="result-title" id="res-title">診断タイトル</h2>
       </div>
 
-      <!-- Savings -->
       <div class="savings-box">
         <div class="savings-label">節約できる可能性</div>
         <div class="savings-amount" id="res-savings">月々 〜円</div>
         <div class="savings-note">※あくまで目安です。詳細は個別診断で！</div>
       </div>
 
-      <!-- Dynamic messages -->
       <div class="msg-list" id="res-msgs"></div>
 
-      <!-- Common ending -->
       <div class="common-msg">
         細かいことは、<strong>個別診断ですっきり！</strong><br>
         のりさんが一緒に考えます🌟
       </div>
 
-      <!-- CTA -->
       <a href="https://norikaesoudan.studio.site/" class="btn btn-green">
-        🐕 のりさんに無料相談する
+        🌟 のりさんに無料相談する
       </a>
       <p class="cta-sub">LINEで気軽に話しかけてね！</p>
 
@@ -607,7 +523,7 @@
 // ── Question data ──────────────────────────────────────────
 const ALL_Q = [
   {
-    id: 'q1', emoji: '👨‍👩‍👧‍👦', num: 'Q1',
+    id: 'q1', svgIcon: 'icon-family', iconW: 148, iconH: 107, num: 'Q1',
     text: '何人家族ですか？',
     nori: 'まずは家族の人数を教えてね！',
     opts: [
@@ -630,7 +546,7 @@ const ALL_Q = [
     ]
   },
   {
-    id: 'q3', emoji: '👶', num: 'Q3',
+    id: 'q3', svgIcon: 'icon-baby', iconW: 90, iconH: 98, num: 'Q3',
     text: '5〜22歳のお子さんはいますか？',
     nori: 'お子さんの有無が節約のカギ！',
     opts: [
@@ -669,17 +585,16 @@ let answers = {};
 let activeQs = [];
 let qIdx = 0;
 
-// ── Utilities ──────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────
 function buildActiveQs() {
   activeQs = ALL_Q.filter(q => !q.cond || q.cond(answers));
 }
 
 function showScreen(id) {
   const target = document.getElementById(id);
-  // If already active, re-trigger animation (for same-screen question transitions)
   if (target.classList.contains('active')) {
     target.classList.remove('active');
-    void target.offsetWidth; // force reflow to restart animation
+    void target.offsetWidth;
   } else {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   }
@@ -706,24 +621,33 @@ function renderQ() {
   const step = qIdx + 1;
   const pct = Math.round((step / total) * 100);
 
-  // Nori message
   document.getElementById('nori-msg').textContent = q.nori;
-
-  // Progress
   document.getElementById('prog-label').textContent = `質問 ${step} / ${total}`;
   document.getElementById('prog-pct').textContent = `${pct}%`;
   document.getElementById('prog-bar').style.width = `${pct}%`;
-
-  // Question
-  document.getElementById('q-emoji').textContent = q.emoji;
   document.getElementById('q-num').textContent = q.num;
   document.getElementById('q-text').textContent = q.text;
+
+  // Icon: SVG symbol or emoji
+  const emojiEl = document.getElementById('q-emoji');
+  if (q.svgIcon) {
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('width', q.iconW);
+    svg.setAttribute('height', q.iconH);
+    const use = document.createElementNS(ns, 'use');
+    use.setAttribute('href', '#' + q.svgIcon);
+    svg.appendChild(use);
+    emojiEl.textContent = '';
+    emojiEl.appendChild(svg);
+  } else {
+    emojiEl.textContent = q.emoji;
+  }
 
   // Options
   const container = document.getElementById('options');
   container.innerHTML = '';
   const saved = answers[q.id];
-
   q.opts.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = 'opt-btn' + (saved === opt.v ? ' selected' : '');
@@ -733,10 +657,8 @@ function renderQ() {
     container.appendChild(btn);
   });
 
-  // Next button
   const btnNext = document.getElementById('btn-next');
-  const isLast = qIdx === activeQs.length - 1;
-  btnNext.textContent = isLast ? '結果を見る 🎉' : '次の質問へ →';
+  btnNext.textContent = (qIdx === activeQs.length - 1) ? '結果を見る 🎉' : '次の質問へ →';
   btnNext.classList.toggle('enabled', !!saved);
 }
 
@@ -751,7 +673,6 @@ function nextQ() {
   const q = activeQs[qIdx];
   if (!answers[q.id]) return;
 
-  // After Q1, rebuild active list (Q2 is conditional on Q1's answer)
   if (q.id === 'q1') {
     const next = qIdx + 1;
     buildActiveQs();
@@ -770,9 +691,8 @@ function nextQ() {
 
 // ── Result ─────────────────────────────────────────────────
 function showResult() {
-  const { q1, q2, q3, q4, q5 } = answers;
+  const { q2, q3, q4, q5 } = answers;
 
-  // Title & savings estimate based on current bill
   let title, savings;
   if (q4 === 'high') {
     title = '節約チャンス大！びっくりするほど変わります✨';
@@ -790,29 +710,21 @@ function showResult() {
   document.getElementById('res-title').textContent = title;
   document.getElementById('res-savings').textContent = savings;
 
-  // Dynamic messages
   const msgs = [];
-
-  // ① Fiber situation
   if (q5 === 'rent' || q5 === 'no-want') {
     msgs.push('📡 光を使わない節約プランもあります！あなたの状況にぴったりの方法を一緒に探しましょう✨');
   } else if (q5 === 'no-fiber') {
-    msgs.push('📡 光回線なしでもしっかり節約できるプランがあります！まずは話を聞いてみてね🐕');
+    msgs.push('📡 光回線なしでもしっかり節約できるプランがあります！まずは話を聞いてみてね🌟');
   } else {
     msgs.push('📡 セット割引を活用すれば、さらにお得になる可能性大！光回線との組み合わせも一緒に確認しましょう✨');
   }
-
-  // ② Children
   if (q3 && q3 !== '0') {
-    msgs.push('👶 お子さんの契約を活用すると、家族全員でさらにお得になることも！組み合わせ次第でびっくりするくらい変わります🐕');
+    msgs.push('👶 お子さんの契約を活用すると、家族全員でさらにお得になることも！組み合わせ次第でびっくりするくらい変わります🌟');
   }
-
-  // ③ Family reluctance
   if (q2 === 'reluctant' || q2 === 'solo') {
     msgs.push('💪 まずは自分だけでも変えてみましょう！家計の節約に気づいたら、家族もきっと後からついてきます💪');
   }
 
-  // Render
   document.getElementById('res-msgs').innerHTML =
     msgs.map(m => `<div class="msg-item">${m}</div>`).join('');
 
