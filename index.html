@@ -377,9 +377,9 @@
     <div class="card">
       <!-- 診断コード -->
       <div class="code-box">
-        <div class="code-label">📋 あなたの診断コード</div>
-        <div class="code-value" id="res-code">―</div>
-        <div class="code-hint">※このコードをメッセージに添えると、より早くお返事できます！</div>
+        <div class="code-label">📋 あなたの診断タイプ</div>
+        <div class="code-value">診断 <span id="res-code">―</span></div>
+        <div class="code-hint">のりさんにメッセージするとき、このコードを教えてね！<br>すぐにぴったりのご提案ができます📱</div>
       </div>
 
       <div class="result-hero">
@@ -569,28 +569,27 @@ function nextQ() {
 }
 
 function buildCode(ans) {
-  // 子供
-  const childMap = { '0': '子ナシ', '1': '子1人', '2': '子2人', '3+': '子3人↑' };
-  const child = childMap[ans.q3] || '子ナシ';
-
-  // 家族
-  let family;
+  // アルファベット：家族・子供の状況
+  const hasKids = ans.q3 !== '0';
+  const cooperative = ans.q2 === 'all-ok' || ans.q2 === 'mostly';
+  let letter;
   if (ans.q1 === '1') {
-    family = '一人';
-  } else {
-    const famMap = { 'all-ok': '全協力', 'mostly': '半協力', 'reluctant': '非協力', 'solo': '自分のみ' };
-    family = famMap[ans.q2] || '全協力';
-  }
+    letter = hasKids ? 'B' : 'A';           // 一人暮らし
+  } else if (!hasKids && cooperative)  { letter = 'C'; }  // 家族あり・子なし・協力的
+  else if (!hasKids && !cooperative)   { letter = 'D'; }  // 家族あり・子なし・非協力
+  else if (hasKids  && cooperative)    { letter = 'E'; }  // 家族あり・子あり・協力的
+  else                                 { letter = 'F'; }  // 家族あり・子あり・非協力
 
-  // 料金
-  const billMap = { 'low': '¥低', 'mid-low': '¥中低', 'mid-high': '¥中高', 'high': '¥高' };
-  const bill = billMap[ans.q4] || '¥中低';
+  // 数字：料金 × 光回線
+  const highBill  = ans.q4 === 'mid-high' || ans.q4 === 'high';
+  const easyFiber = ans.q5 === 'can';
+  let num;
+  if (!highBill &&  easyFiber) num = '1';  // 低料金・光OK
+  if (!highBill && !easyFiber) num = '2';  // 低料金・光難
+  if ( highBill &&  easyFiber) num = '3';  // 高料金・光OK
+  if ( highBill && !easyFiber) num = '4';  // 高料金・光難
 
-  // 光回線
-  const fiberMap = { 'can': '光○', 'rent': '光/賃貸', 'no-want': '光NG', 'no-fiber': '光ナシ' };
-  const fiber = fiberMap[ans.q5] || '光○';
-
-  return `${child}　／　${family}　／　${bill}　／　${fiber}`;
+  return letter + num;
 }
 
 function showResult() {
