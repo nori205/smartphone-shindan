@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>スマホのりかえ かんたん診断</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+      background-color: #FFF9F0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px 16px 48px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── Background decorations ── */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .bg-dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, #F0C070 1.5px, transparent 1.5px);
+      background-size: 28px 28px;
+      opacity: 0.18;
+    }
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: #FAD9A1;
+    }
+
+    /* ── Container ── */
+    .container {
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Screen transitions ── */
+    .screen { display: none; }
+    .screen.active {
+      display: block;
+      animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 28px 20px 32px;
+      box-shadow: 0 8px 40px rgba(212, 112, 10, 0.10);
+      margin-top: 20px;
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: linear-gradient(135deg, #F5A623, #F7B731);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 99px;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s, opacity 0.2s;
+      min-height: 54px;
+      font-size: 17px;
+      text-align: center;
+      text-decoration: none;
+      line-height: 1.35;
+      gap: 6px;
+    }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-orange {
+      background: linear-gradient(135deg, #F5A623 0%, #F7B731 100%);
+      color: #fff;
+      box-shadow: 0 5px 18px rgba(245, 166, 35, 0.45);
+      padding: 16px 20px;
+    }
+    .btn-orange:active { box-shadow: 0 2px 8px rgba(245, 166, 35, 0.3); }
+
+    .btn-green {
+      background: linear-gradient(135deg, #3CB371 0%, #27A05A 100%);
+      color: #fff;
+      box-shadow: 0 5px 20px rgba(60, 179, 113, 0.45);
+      padding: 18px 20px;
+      font-size: 18px;
+      min-height: 62px;
+      border-radius: 18px;
+    }
+    .btn-green:active { box-shadow: 0 2px 8px rgba(60, 179, 113, 0.3); }
+
+    .btn-ghost {
+      background: transparent;
+      color: #bbb;
+      border: 1.5px solid #e8e8e8;
+      padding: 13px 20px;
+      font-size: 14px;
+      min-height: 48px;
+    }
+    .btn-ghost:active { background: #f5f5f5; }
+
+    .btn-next {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .btn-next.enabled {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ══════════════════════════════════
+       TITLE SCREEN
+    ══════════════════════════════════ */
+    .title-top { text-align: center; margin-bottom: 22px; }
+
+    .dog-big {
+      font-size: 90px;
+      line-height: 1;
+      display: block;
+      margin-bottom: 10px;
+      animation: dogBounce 2.5s ease-in-out infinite;
+    }
+    @keyframes dogBounce {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50%       { transform: translateY(-10px) rotate(2deg); }
+    }
+
+    .title-main {
+      font-size: 28px;
+      font-weight: 900;
+      color: #D4700A;
+      line-height: 1.3;
+      margin: 12px 0 8px;
+    }
+    .title-sub {
+      font-size: 14px;
+      color: #999;
+      line-height: 1.7;
+    }
+
+    .features {
+      background: #FFF9F0;
+      border-radius: 16px;
+      padding: 6px 16px;
+      margin: 20px 0 22px;
+    }
+    .feat-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 0;
+      font-size: 14px;
+      color: #555;
+    }
+    .feat-row:not(:last-child) { border-bottom: 1px solid #FAD9A1; }
+    .feat-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #F5A623, #F7B731);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .nori-caption {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    /* ══════════════════════════════════
+       QUESTION SCREEN
+    ══════════════════════════════════ */
+
+    /* Nori speech bubble */
+    .nori-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .nori-avatar {
+      font-size: 38px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .speech-bubble {
+      background: linear-gradient(135deg, #F5A623, #F7B731);
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 10px 14px;
+      border-radius: 14px 14px 14px 4px;
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    /* Progress */
+    .progress-section { margin-bottom: 22px; }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+    .progress-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #E8831A;
+    }
+    .progress-pct { font-size: 13px; color: #ccc; }
+    .progress-track {
+      height: 9px;
+      background: #FAD9A1;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #F5A623, #F7B731);
+      border-radius: 99px;
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Question text */
+    .q-emoji {
+      text-align: center;
+      font-size: 54px;
+      margin-bottom: 10px;
+    }
+    .q-num {
+      font-size: 12px;
+      font-weight: 900;
+      color: #F5A623;
+      letter-spacing: 0.08em;
+      margin-bottom: 5px;
+    }
+    .q-text {
+      font-size: 20px;
+      font-weight: 900;
+      color: #333;
+      line-height: 1.45;
+      margin-bottom: 22px;
+    }
+
+    /* Options */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .opt-btn {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      width: 100%;
+      background: #FFF9F0;
+      border: 2px solid #FAD9A1;
+      border-radius: 14px;
+      padding: 13px 16px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+      min-height: 54px;
+      text-align: left;
+      font-family: inherit;
+    }
+    .opt-btn:active { transform: scale(0.98); }
+    .opt-btn.selected {
+      border-color: #F5A623;
+      background: linear-gradient(135deg, rgba(245,166,35,0.07), rgba(247,183,49,0.07));
+    }
+    .opt-ring {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid #FAD9A1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
+      font-size: 13px;
+      color: transparent;
+      font-weight: 900;
+    }
+    .opt-btn.selected .opt-ring {
+      background: #F5A623;
+      border-color: #F5A623;
+      color: #fff;
+    }
+    .opt-label {
+      font-size: 15px;
+      color: #555;
+      font-weight: 500;
+      line-height: 1.45;
+      flex: 1;
+    }
+    .opt-btn.selected .opt-label {
+      color: #E8831A;
+      font-weight: 700;
+    }
+
+    .btn-next-wrap { margin-top: 22px; }
+
+    /* ══════════════════════════════════
+       RESULT SCREEN
+    ══════════════════════════════════ */
+    .result-hero {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .dog-result {
+      font-size: 80px;
+      line-height: 1;
+      display: block;
+      margin-bottom: 10px;
+      animation: dogBounce 2.5s ease-in-out infinite;
+    }
+    .result-title {
+      font-size: 21px;
+      font-weight: 900;
+      color: #D4700A;
+      line-height: 1.4;
+      margin-top: 10px;
+    }
+
+    /* Savings box */
+    .savings-box {
+      background: linear-gradient(135deg, #E8831A, #D4700A);
+      border-radius: 18px;
+      padding: 18px 16px;
+      text-align: center;
+      margin-bottom: 18px;
+      color: #fff;
+    }
+    .savings-label {
+      font-size: 12px;
+      opacity: 0.85;
+      margin-bottom: 3px;
+    }
+    .savings-amount {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+    .savings-note { font-size: 11px; opacity: 0.7; }
+
+    /* Message list */
+    .msg-list {
+      background: #FFF9F0;
+      border-radius: 16px;
+      padding: 2px 16px;
+      margin-bottom: 18px;
+    }
+    .msg-item {
+      font-size: 14.5px;
+      color: #555;
+      line-height: 1.75;
+      padding: 14px 0;
+    }
+    .msg-item:not(:last-child) { border-bottom: 1px dashed #FAD9A1; }
+
+    /* Common closing message */
+    .common-msg {
+      background: linear-gradient(135deg, rgba(245,166,35,0.08), rgba(247,183,49,0.08));
+      border: 1.5px solid #FAD9A1;
+      border-radius: 16px;
+      padding: 16px 18px;
+      font-size: 15px;
+      color: #555;
+      line-height: 1.75;
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .common-msg strong { color: #E8831A; }
+
+    .cta-sub {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #bbb;
+    }
+    .retry-wrap { margin-top: 12px; }
+  </style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-dots"></div>
+  <div class="bg-circle" style="width:220px;height:220px;top:-80px;right:-70px;opacity:0.42;"></div>
+  <div class="bg-circle" style="width:110px;height:110px;top:32%;left:-36px;opacity:0.35;"></div>
+  <div class="bg-circle" style="width:70px;height:70px;top:58%;right:10px;opacity:0.28;"></div>
+  <div class="bg-circle" style="width:170px;height:170px;bottom:-65px;left:12%;opacity:0.38;"></div>
+  <div class="bg-circle" style="width:50px;height:50px;top:72%;left:60%;opacity:0.28;"></div>
+</div>
+
+<div class="container">
+
+  <!-- ==================== TITLE ==================== -->
+  <div id="screen-title" class="screen active">
+    <div class="card">
+      <div class="title-top">
+        <span class="dog-big">🐕</span>
+        <div class="badge">✨ 無料・約1分でわかる</div>
+        <h1 class="title-main">スマホのりかえ<br>かんたん診断</h1>
+        <p class="title-sub">5つの質問に答えるだけで<br>あなたにぴったりの節約ポイントがわかる！</p>
+      </div>
+
+      <div class="features">
+        <div class="feat-row">
+          <div class="feat-icon">⏱</div>
+          <span>たった <strong>1分</strong> で完了！</span>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon">🔒</div>
+          <span>個人情報の入力 <strong>一切なし</strong></span>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon">💡</div>
+          <span>節約ポイントを <strong>ズバリ診断</strong></span>
+        </div>
+      </div>
+
+      <button class="btn btn-orange" onclick="startQuiz()">🐾 診断スタート！</button>
+      <p class="nori-caption">のりさんが一緒に考えます🌟</p>
+    </div>
+  </div>
+
+  <!-- ==================== QUESTION ==================== -->
+  <div id="screen-question" class="screen">
+    <div class="card">
+      <!-- Nori -->
+      <div class="nori-row">
+        <div class="nori-avatar">🐕</div>
+        <div class="speech-bubble" id="nori-msg">一緒に考えよう！</div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section">
+        <div class="progress-meta">
+          <span class="progress-label" id="prog-label">質問 1 / 5</span>
+          <span class="progress-pct" id="prog-pct">20%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="prog-bar" style="width:20%"></div>
+        </div>
+      </div>
+
+      <!-- Question -->
+      <div class="q-emoji" id="q-emoji">👨‍👩‍👧‍👦</div>
+      <div class="q-num" id="q-num">Q1</div>
+      <div class="q-text" id="q-text">質問テキスト</div>
+
+      <!-- Options -->
+      <div class="options" id="options"></div>
+
+      <!-- Next -->
+      <div class="btn-next-wrap">
+        <button class="btn btn-orange btn-next" id="btn-next" onclick="nextQ()">
+          次の質問へ →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== RESULT ==================== -->
+  <div id="screen-result" class="screen">
+    <div class="card">
+      <div class="result-hero">
+        <span class="dog-result">🐕‍🦺</span>
+        <div class="badge">✅ 診断完了！</div>
+        <h2 class="result-title" id="res-title">診断タイトル</h2>
+      </div>
+
+      <!-- Savings -->
+      <div class="savings-box">
+        <div class="savings-label">節約できる可能性</div>
+        <div class="savings-amount" id="res-savings">月々 〜円</div>
+        <div class="savings-note">※あくまで目安です。詳細は個別診断で！</div>
+      </div>
+
+      <!-- Dynamic messages -->
+      <div class="msg-list" id="res-msgs"></div>
+
+      <!-- Common ending -->
+      <div class="common-msg">
+        細かいことは、<strong>個別診断ですっきり！</strong><br>
+        のりさんが一緒に考えます🌟
+      </div>
+
+      <!-- CTA -->
+      <a href="https://lin.ee/XXXXXXX" class="btn btn-green">
+        🐕 のりさんに無料相談する
+      </a>
+      <p class="cta-sub">LINEで気軽に話しかけてね！</p>
+
+      <div class="retry-wrap">
+        <button class="btn btn-ghost" onclick="retryQuiz()">🔄 もう一度診断する</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Question data ──────────────────────────────────────────
+const ALL_Q = [
+  {
+    id: 'q1', emoji: '👨‍👩‍👧‍👦', num: 'Q1',
+    text: '何人家族ですか？',
+    nori: 'まずは家族の人数を教えてね！',
+    opts: [
+      { v: '1',   label: '1人（おひとりさま）' },
+      { v: '2',   label: '2人' },
+      { v: '3-4', label: '3〜4人' },
+      { v: '5+',  label: '5人以上' },
+    ]
+  },
+  {
+    id: 'q2', emoji: '🤝', num: 'Q2',
+    text: '家族は乗り換えに協力的ですか？',
+    nori: 'みんなの気持ちも大事だよ！',
+    cond: (ans) => ans.q1 !== '1',
+    opts: [
+      { v: 'all-ok',    label: 'バッチリ！みんな賛成' },
+      { v: 'mostly',    label: 'まあまあ協力的' },
+      { v: 'reluctant', label: 'あまり乗り気じゃない' },
+      { v: 'solo',      label: '自分だけ変えたい' },
+    ]
+  },
+  {
+    id: 'q3', emoji: '👶', num: 'Q3',
+    text: '5〜22歳のお子さんはいますか？',
+    nori: 'お子さんの有無が節約のカギ！',
+    opts: [
+      { v: '0',  label: 'いない' },
+      { v: '1',  label: '1人いる' },
+      { v: '2',  label: '2人いる' },
+      { v: '3+', label: '3人以上いる' },
+    ]
+  },
+  {
+    id: 'q4', emoji: '💸', num: 'Q4',
+    text: '毎月のスマホ代はだいたいいくらですか？（家族全員合計でもOK）',
+    nori: '今の料金を確認しよう！',
+    opts: [
+      { v: 'low',      label: '5,000円以下' },
+      { v: 'mid-low',  label: '5,000〜10,000円' },
+      { v: 'mid-high', label: '10,000〜20,000円' },
+      { v: 'high',     label: '20,000円以上' },
+    ]
+  },
+  {
+    id: 'q5', emoji: '🏠', num: 'Q5',
+    text: '光回線（自宅のWi-Fi契約）の変更は可能ですか？',
+    nori: 'セット割がお得なことも多いよ！',
+    opts: [
+      { v: 'can',      label: '変更できる／検討できる' },
+      { v: 'rent',     label: '賃貸なので難しい' },
+      { v: 'no-want',  label: '変更したくない' },
+      { v: 'no-fiber', label: '光回線を使っていない' },
+    ]
+  }
+];
+
+// ── State ──────────────────────────────────────────────────
+let answers = {};
+let activeQs = [];
+let qIdx = 0;
+
+// ── Utilities ──────────────────────────────────────────────
+function buildActiveQs() {
+  activeQs = ALL_Q.filter(q => !q.cond || q.cond(answers));
+}
+
+function showScreen(id) {
+  const target = document.getElementById(id);
+  // If already active, re-trigger animation (for same-screen question transitions)
+  if (target.classList.contains('active')) {
+    target.classList.remove('active');
+    void target.offsetWidth; // force reflow to restart animation
+  } else {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  }
+  target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Quiz flow ──────────────────────────────────────────────
+function startQuiz() {
+  answers = {};
+  qIdx = 0;
+  buildActiveQs();
+  renderQ();
+  showScreen('screen-question');
+}
+
+function retryQuiz() {
+  showScreen('screen-title');
+}
+
+function renderQ() {
+  const q = activeQs[qIdx];
+  const total = activeQs.length;
+  const step = qIdx + 1;
+  const pct = Math.round((step / total) * 100);
+
+  // Nori message
+  document.getElementById('nori-msg').textContent = q.nori;
+
+  // Progress
+  document.getElementById('prog-label').textContent = `質問 ${step} / ${total}`;
+  document.getElementById('prog-pct').textContent = `${pct}%`;
+  document.getElementById('prog-bar').style.width = `${pct}%`;
+
+  // Question
+  document.getElementById('q-emoji').textContent = q.emoji;
+  document.getElementById('q-num').textContent = q.num;
+  document.getElementById('q-text').textContent = q.text;
+
+  // Options
+  const container = document.getElementById('options');
+  container.innerHTML = '';
+  const saved = answers[q.id];
+
+  q.opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn' + (saved === opt.v ? ' selected' : '');
+    btn.setAttribute('type', 'button');
+    btn.innerHTML = `<div class="opt-ring">✓</div><span class="opt-label">${opt.label}</span>`;
+    btn.addEventListener('click', () => pickOpt(q.id, opt.v, btn));
+    container.appendChild(btn);
+  });
+
+  // Next button
+  const btnNext = document.getElementById('btn-next');
+  const isLast = qIdx === activeQs.length - 1;
+  btnNext.textContent = isLast ? '結果を見る 🎉' : '次の質問へ →';
+  btnNext.classList.toggle('enabled', !!saved);
+}
+
+function pickOpt(qId, val, clickedBtn) {
+  answers[qId] = val;
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  clickedBtn.classList.add('selected');
+  document.getElementById('btn-next').classList.add('enabled');
+}
+
+function nextQ() {
+  const q = activeQs[qIdx];
+  if (!answers[q.id]) return;
+
+  // After Q1, rebuild active list (Q2 is conditional on Q1's answer)
+  if (q.id === 'q1') {
+    const next = qIdx + 1;
+    buildActiveQs();
+    qIdx = next;
+  } else {
+    qIdx++;
+  }
+
+  if (qIdx >= activeQs.length) {
+    showResult();
+  } else {
+    renderQ();
+    showScreen('screen-question');
+  }
+}
+
+// ── Result ─────────────────────────────────────────────────
+function showResult() {
+  const { q1, q2, q3, q4, q5 } = answers;
+
+  // Title & savings estimate based on current bill
+  let title, savings;
+  if (q4 === 'high') {
+    title = '節約チャンス大！びっくりするほど変わります✨';
+    savings = '月々 10,000円〜';
+  } else if (q4 === 'mid-high') {
+    title = '節約できる余地がたっぷり！一緒に確認しよう';
+    savings = '月々 5,000〜8,000円';
+  } else if (q4 === 'mid-low') {
+    title = 'もう少し下げられるかも！チェックしよう';
+    savings = '月々 2,000〜5,000円';
+  } else {
+    title = '今の料金、本当にベスト？一度確認しよう';
+    savings = '月々 〜2,000円';
+  }
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-savings').textContent = savings;
+
+  // Dynamic messages
+  const msgs = [];
+
+  // ① Fiber situation
+  if (q5 === 'rent' || q5 === 'no-want') {
+    msgs.push('📡 光を使わない節約プランもあります！あなたの状況にぴったりの方法を一緒に探しましょう✨');
+  } else if (q5 === 'no-fiber') {
+    msgs.push('📡 光回線なしでもしっかり節約できるプランがあります！まずは話を聞いてみてね🐕');
+  } else {
+    msgs.push('📡 セット割引を活用すれば、さらにお得になる可能性大！光回線との組み合わせも一緒に確認しましょう✨');
+  }
+
+  // ② Children
+  if (q3 && q3 !== '0') {
+    msgs.push('👶 お子さんの契約を活用すると、家族全員でさらにお得になることも！組み合わせ次第でびっくりするくらい変わります🐕');
+  }
+
+  // ③ Family reluctance
+  if (q2 === 'reluctant' || q2 === 'solo') {
+    msgs.push('💪 まずは自分だけでも変えてみましょう！家計の節約に気づいたら、家族もきっと後からついてきます💪');
+  }
+
+  // Render
+  document.getElementById('res-msgs').innerHTML =
+    msgs.map(m => `<div class="msg-item">${m}</div>`).join('');
+
+  showScreen('screen-result');
+}
+</script>
+</body>
+</html>
